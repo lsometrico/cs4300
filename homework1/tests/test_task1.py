@@ -1,9 +1,8 @@
 # test task1.py using pytest; should return the output using stdout 
 import pytest
-from src.task1 import hello_world
+from src.task1 import main
 
 def test_hello(capsys):
-    hello_world()
+    main()
     captured = capsys.readoutter()
     assert captured.out == "Hello, world!\n"
-
