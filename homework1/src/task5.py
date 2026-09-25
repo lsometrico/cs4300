@@ -1,8 +1,11 @@
 # list of some of my personal favorite books 
 fav_books = [
-        ("BOMB! The race to build - and steal - the world's most dangerous weapon"), ("Kingdom Hearts Ultimania"),
-        ("Last God Standing"), ("Puerto Rico"),
-        ("Atomic Habits"), ("How to Become a Monster to Get Away With Murder"),
+        ("BOMB! The race to build - and steal - the world's most dangerous weapon", "Steve Sheinkin"),
+    ("Kingdom Hearts Ultimania", "Tetsuya Nomura"),
+    ("Last God Standing", "Michael Boatman"),
+    ("Puerto Rico", "Jorell Melendez-Badillo"),
+    ("Atomic Habits", "James Clear"),
+    ("How to Become a Monster to Get Away With Murder", "Hugo Leclerq"),
 
 ]
 
@@ -24,8 +27,8 @@ def get_student_id(name, database=student_database):
 
 def main():
     print("first three books:")
-    for title in first_three():
-        print(f"{title}")
+    for title, author in first_three():
+        print(f"{title} by {author}")
 
     print("student database:")
     for name, student_id in student_database.items():

@@ -1,26 +1,17 @@
-# demonstrate the various basic data types in python
-def interger():
-    return 67
+# demonstrate the various basic data types in python and some uses 
+def interger_sum(n1, n2):
+    return n1 + n2
 
-def float_point():
-    return 5.49
+def float_point_mult(f1, f2):
+    return f1 * f2
 
-def string():
-    return "Pain, agony and suffering"
+def string(phrase):
+    return phrase
 
-def boolean():
-    return False 
-
-def main():
-    int_value = interger()
-    floating_point = float_point()
-    string_get = string()
-    boolean_get = boolean()
-
-    print(int_value)
-    print(floating_point)
-    print(string_get)
-    print(boolean_get)
-
-if __name__ == "__main__":
-    main()
+# test if something is true or false in boolean values using a greater than or less than 5
+def boolean(number):
+    if number >= 5:
+        return True
+    else:
+        return False 
+    

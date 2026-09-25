@@ -4,5 +4,5 @@ from src.task1 import main
 
 def test_hello(capsys):
     main()
-    captured = capsys.readoutter()
+    captured = capsys.readouterr()
     assert captured.out == "Hello, world!\n"

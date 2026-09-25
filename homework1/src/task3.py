@@ -38,7 +38,3 @@ def sum_hundred():
 
     print(total)
 
-if __name__ == "__main__":
-    sign_check(2)
-    print_prime()
-    sum_hundred()
