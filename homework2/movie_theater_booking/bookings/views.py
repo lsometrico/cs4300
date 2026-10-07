@@ -22,7 +22,7 @@ class SeatViewSet(viewsets.ModelViewSet):
         qs = super().get_queryset()
         if self.request.query_params.get('available') == 'true':
                 qs = qs.filter(booking_status=False)
-                return qs
+        return qs
             
             
 #make sure that users can onl see their own bookings and also create new ones 
@@ -33,7 +33,7 @@ class BookingViewSet(viewsets.ModelViewSet):
     
     def get_queryset(self):
             if not self.request.user.is_authenticated:
-                return Booking.objects.none
+                return Booking.objects.none()
             return Booking.objects.filter(user=self.request.user).order_by('-booking_date')
     
     def create (self, request, *args, **kwargs):

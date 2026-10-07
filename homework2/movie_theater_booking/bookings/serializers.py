@@ -22,6 +22,6 @@ class BookingSerializer(serializers.ModelSerializer):
     
     #will reject already taken seats using the validation error   
     def validate_seat(self, seat):
-        if seat.bookings_status:
+        if seat.booking_status:
             raise serializers.ValidationError('This seat is already booked. ')
         return seat 
