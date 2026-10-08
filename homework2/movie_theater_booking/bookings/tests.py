@@ -7,6 +7,9 @@ from django.urls import reverse
 from rest_framework.test import APITestCase
 from .models import Movie, Seat, Booking
 from .services import book_seat, SeatUnavailable
+from django.core.management import call_command
+from bookings.management.commands.seed_demo import MOVIES, ROWS, SEATS_PER_ROW
+
 
 User = get_user_model()
 
@@ -148,3 +151,11 @@ class PageTests(TestCase):
     def test_logout_returns(self):
         self.client.force_login(self.user)
         self.assertRedirects(self.client.post(reverse('logout')), reverse('movie_list'))
+
+class SeedTests(TestCase):
+    def test_seed_demo_creates_data_and_is_repeatable(self):
+        call_command('seed_demo')
+        call_command('seed_demo')  # running twice must not duplicate anything
+        self.assertEqual(Movie.objects.count(), len(MOVIES))
+        self.assertEqual(Seat.objects.count(), len(ROWS) * SEATS_PER_ROW)
+        self.assertTrue(User.objects.get(username='demo').is_staff)
