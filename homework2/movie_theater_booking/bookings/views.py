@@ -1,10 +1,10 @@
 from django.shortcuts import render
-from django.db import transaction
 from rest_framework import viewsets, status
 from rest_framework.response import Response 
 
 from .models import Movie, Seat, Booking 
 from .serializers import MovieSerializer, SeatSerializer, BookingSerializer
+from .services import book_seat, SeatUnavailable
 # Create your views here.
 
 #movie view for the set. On Movies, this is the full CRUD stuff 
@@ -30,27 +30,25 @@ class SeatViewSet(viewsets.ModelViewSet):
 
 class BookingViewSet(viewsets.ModelViewSet):
     serializer_class = BookingSerializer
+    https_method_names = ['get', 'post', 'delete', 'head', 'options']
     
     def get_queryset(self):
             if not self.request.user.is_authenticated:
                 return Booking.objects.none()
             return Booking.objects.filter(user=self.request.user).order_by('-booking_date')
     
-    def create (self, request, *args, **kwargs):
+    def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        seat_id = serializer.validated_data['seat'].id 
-        
-        #avoid two people grabbing it at the same time, will return a 400 error if it happens  
-        with transaction.atomic():
-            seat = Seat.objects.select_for_update().get(id=seat_id)
-            if seat.booking_status:
-                return Response({'seat': ['This seat is already booked']}, status=status.HTTP_400_BAD_REQUEST)
-            seat.booking_status = True
-            seat.save()
-            serializer.save(user=request.user)
-            
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        try:
+            booking = book_seat(
+                request.user,
+                serializer.validated_data['movie'],
+                serializer.validated_data['seat'].id,
+            )
+        except SeatUnavailable as e:
+            return Response({'seat': [str(e)]}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(self.get_serializer(booking).data, status=status.HTTP_201_CREATED)
         
 
     

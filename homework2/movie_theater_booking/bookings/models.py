@@ -1,6 +1,8 @@
 from django.db import models
 from django.conf import settings
 from django.core.validators import MinValueValidator
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
 # Create your models here.
 
 #models for the booking app: includes movie, seat and booking 
@@ -37,4 +39,9 @@ class Booking(models.Model):
 
     def __str__(self):
         return f"{self.user} - {self.movie} - {self.seat}"
+
+# for the purposes of when a booking is deleted, that seat is freed up     
+@receiver(post_delete, sender=Booking)
+def free_seat_on_delete(sender, instance, **kwargs):
+    Seat.objects.filter(pk=instance.seat_id).update(booking_status=False)
     
