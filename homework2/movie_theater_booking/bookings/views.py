@@ -1,4 +1,6 @@
-from django.shortcuts import render
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect, get_object_or_404
 from rest_framework import viewsets, status
 from rest_framework.response import Response 
 
@@ -49,6 +51,44 @@ class BookingViewSet(viewsets.ModelViewSet):
         except SeatUnavailable as e:
             return Response({'seat': [str(e)]}, status=status.HTTP_400_BAD_REQUEST)
         return Response(self.get_serializer(booking).data, status=status.HTTP_201_CREATED)
-        
+    
+# ---------------------------------------------------------------
+# Template (HTML) views. These render pages instead of JSON, but
+# they use the same models and the same book_seat() service as the API.
+# ---------------------------------------------------------------
+
+def movie_list(request):
+    """Show every movie, each with a button to book a seat."""
+    movies = Movie.objects.all().order_by('title')
+    return render(request, 'bookings/movie_list.html', {'movies': movies})
+
+
+@login_required
+def book_seat_page(request, movie_id):
+    """Show available seats for a movie and handle the booking form."""
+    movie = get_object_or_404(Movie, pk=movie_id)
+
+    if request.method == 'POST':
+        try:
+            book_seat(request.user, movie, request.POST.get('seat'))
+        except SeatUnavailable as e:
+            messages.error(request, str(e))
+        except (Seat.DoesNotExist, ValueError):
+            messages.error(request, 'Please choose a valid seat.')
+        else:
+            messages.success(request, f'Seat booked for {movie.title}!')
+            return redirect('booking_history')
+
+    seats = Seat.objects.filter(booking_status=False).order_by('seat_number')
+    return render(request, 'bookings/seat_booking.html', {'movie': movie, 'seats': seats})
+
+
+@login_required
+def booking_history(request):
+    """Show only the logged-in user's bookings, newest first."""
+    bookings = (Booking.objects.filter(user=request.user)
+                .select_related('movie', 'seat')
+                .order_by('-booking_date'))
+    return render(request, 'bookings/booking_history.html', {'bookings': bookings})
 
     
