@@ -2,7 +2,7 @@
  
 A movie theater booking application built with Python, Django, and Django REST Framework. Users can browse movies, book seats, and review their booking history, both through a REST API and through a Bootstrap-styled web interface that reads and writes the same data.
  
-**Live site (Render):** https://YOUR-SERVICE-NAME.onrender.com
+**Live site (Render):** https://cs4300-9mbt.onrender.com/
  
 **Demo login:** username `demo`, password `demo12345` (a staff account with no permissions: it can book seats but cannot edit data).
  
