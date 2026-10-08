@@ -123,3 +123,9 @@ The app is deployed as a Render **Web Service** .Render's free tier does not kee
 - Seats are shared across movies: booking a seat marks it taken for every showing, because the assignment's model has a single status per seat.
 - SQLite data on Render's free tier is temporary and resets on every deploy.
  
+
+ ## AI USAGE 
+- **Tool:** Claude (Anthropic), used through the claude.ai chat interface. Model: Claude Sonnet 5.5
+- **Used for:** Explaining the Django structure and assignment requirements; drafting settings, serializers, ViewSets, URL routing, the `book_seat()` service, the Bootstrap templates and page views, the unit/integration/Behave tests, the `seed_demo` command, and the Render deployment settings; reviewing my pushed GitHub commits for bugs; diagnosing error messages; drafting the README and this log.
+- **How I used the output:** Claude was used to understand the inner workings of Django in more vague concepts (such as the implemenation of settings in order to prep a website deployment). Code was reviewed before, and tested multiple times before committing on git. I ran the app and the full test suite myself before each commit, and tested the API by hand in the browsable API.
+
