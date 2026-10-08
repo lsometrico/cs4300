@@ -30,7 +30,7 @@ class SeatViewSet(viewsets.ModelViewSet):
 
 class BookingViewSet(viewsets.ModelViewSet):
     serializer_class = BookingSerializer
-    https_method_names = ['get', 'post', 'delete', 'head', 'options']
+    http_method_names = ['get', 'post', 'delete', 'head', 'options']
     
     def get_queryset(self):
             if not self.request.user.is_authenticated:
