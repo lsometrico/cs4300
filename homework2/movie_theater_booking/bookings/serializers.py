@@ -4,6 +4,8 @@ from .models import Movie, Seat, Booking
 
 #movie serializer 
 class MovieSerializer(serializers.ModelSerializer):
+    
+    user = serializers.ReadOnlyField(source='user.username')
     class Meta:
         model = Movie
         fields = ['id','title', 'description', 'release_date', 'duration']
